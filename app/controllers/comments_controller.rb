@@ -25,8 +25,7 @@ class CommentsController < ApplicationController
     comment.author_id = @user.id
 
     if comment.save
-      # TODO: Fix
-      redirect_to comment
+      redirect_to article_comment_path(comment.article, comment)
     else
       render plain: comment.errors.full_messages.join("\n"), status: :unprocessable_entity
     end
