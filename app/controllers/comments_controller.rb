@@ -1,4 +1,8 @@
 class CommentsController < ApplicationController
+  include Authenticate
+
+  prepend_before_action :authenticate, except: [ :index, :show ]
+
   def index
     @comments = Comment.all
 

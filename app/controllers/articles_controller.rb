@@ -1,4 +1,8 @@
 class ArticlesController < ApplicationController
+  include Authenticate
+
+  prepend_before_action :authenticate, except: [ :show ]
+
   def index
     @articles = Article.all
 
