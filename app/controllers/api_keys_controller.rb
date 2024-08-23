@@ -4,14 +4,17 @@ class ApiKeysController < ApplicationController
   prepend_before_action :authenticate, only: [ :index ]
 
   def index
-    user = User.find(params[:user_id])
+    Rails.logger.info("User: #{@user}")
+    if @user != nil
+      response = ""
+      @user.api_keys.each do |api_key|
+        response += "Id: #{api_key.id}\n"
+      end
 
-    response = ""
-    user.api_keys.each do |api_key|
-      response += "Id: #{api_key.id}\n"
+      render plain: response
+    else
+      render status: :unauthorized
     end
-
-    render plain: response
   end
 
   def create
@@ -26,6 +29,8 @@ class ApiKeysController < ApplicationController
         else
           render status: :unprocessable_entity
         end
+
+        return
       end
     end
 

@@ -16,7 +16,10 @@ module Authenticate
     attr_writer :user
 
     def authenticator(token, options)
-      @api_key = ApiKey.find_by(token_digest: BCrypt::Password.create(token))
-      api_key? ? api_key.user : nil
+      api_key = ApiKey.authenticate_by_token(token)
+      Rails.logger.info("Key: #{api_key}")
+      if api_key
+        @user = api_key.user
+      end
     end
 end
