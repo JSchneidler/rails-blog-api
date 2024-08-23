@@ -1,8 +1,8 @@
 class UsersController < ApplicationController
   def index
-    response = ""
-
     users = User.all
+
+    response = ""
     users.each do |user|
       response += "#{user_info(user)}\n"
     end
@@ -22,7 +22,7 @@ class UsersController < ApplicationController
     if user.save
       redirect_to user
     else
-      render plain: user.errors.full_messages, status: :unprocessable_entity
+      render plain: user.errors.full_messages.join("\n"), status: :unprocessable_entity
     end
   end
 
@@ -32,7 +32,7 @@ class UsersController < ApplicationController
     if user.update(user_params)
       show_user(user)
     else
-      render plain: user.errors.full_messages, status: :unprocessable_entity
+      render plain: user.errors.full_messages("\n"), status: :unprocessable_entity
     end
   end
 
@@ -44,7 +44,7 @@ class UsersController < ApplicationController
     if user.destroy
       render plain: "Deleted user: #{user_info}"
     else
-      render plain: user.errors.full_messages, status: :unprocessable_entity
+      render plain: user.errors.full_messages.join("\n"), status: :unprocessable_entity
     end
   end
 
@@ -54,7 +54,7 @@ class UsersController < ApplicationController
     end
 
     def user_info(user)
-      "Name(ID): #{user.name}(#{user.id}), Article Count: #{user.articles.length}, Comment Count: #{user.comments.length}"
+      "Name(Id): #{user.name}(#{user.id}), Article Count: #{user.articles.length}, Comment Count: #{user.comments.length}"
     end
 
     def show_user(user)

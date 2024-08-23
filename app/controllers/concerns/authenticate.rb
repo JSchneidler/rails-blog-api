@@ -4,13 +4,11 @@ module Authenticate
   include ActionController::HttpAuthentication::Basic::ControllerMethods
   include ActionController::HttpAuthentication::Token::ControllerMethods
 
-  attr_reader :user
-
   def authenticate
     if request.headers["Authorization"].blank?
       unauthorized_response
     else
-      @user = authenticate_with_http_token &method(:token_authenticator)
+      authenticate_with_http_token &method(:token_authenticator)
     end
   end
 
@@ -18,7 +16,7 @@ module Authenticate
     if request.headers["Authorization"].blank?
       unauthorized_response
     else
-      @user = authenticate_with_http_basic &method(:password_authenticator)
+      authenticate_with_http_basic &method(:password_authenticator)
     end
   end
 

@@ -24,17 +24,12 @@ class ApiKeysController < ApplicationController
   end
 
   def destroy
-    api_key = ApiKey.find(params[:id])
+    api_key = @user.api_keys.find(params[:id])
 
-    Rails.logger.info(api_key.user)
-    Rails.logger.info(@user)
-
-    if api_key&.user.id == @user.id
-      if api_key.destroy
-        render plain: "Revoked api_key #{api_key.id} for user #{user.name}(#{user.id})"
-      else
-        render plain: api_key.errors.full_messages, status: :unprocessable_entity
-      end
+    if api_key.destroy
+      render plain: "Revoked api_key #{api_key.id} for user #{api_key.user.name}(#{api_key.user.id})"
+    else
+      render plain: api_key.errors.full_messages.join("\n"), status: :unprocessable_entity
     end
   end
 end
